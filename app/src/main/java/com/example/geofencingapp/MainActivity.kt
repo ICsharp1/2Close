@@ -2,10 +2,13 @@ package com.example.geofencingapp
 
 import android.Manifest
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -35,7 +38,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        private const val GEOFENCE_RADIUS_IN_METERS = 200.0f
         private const val GEOFENCE_ID = "TARGET_GEOFENCE"
     }
 
@@ -150,9 +152,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun addGeofence(latLng: LatLng) {
+        val sharedPreferences = getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE)
+        val radius = sharedPreferences.getInt(SettingsActivity.KEY_RADIUS, 200).toFloat()
+
         val geofence = Geofence.Builder()
             .setRequestId(GEOFENCE_ID)
-            .setCircularRegion(latLng.latitude, latLng.longitude, GEOFENCE_RADIUS_IN_METERS)
+            .setCircularRegion(latLng.latitude, latLng.longitude, radius)
             .setExpirationDuration(Geofence.NEVER_EXPIRE)
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
             .build()
@@ -184,6 +189,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         return geofencePendingIntent as PendingIntent
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     // MapView lifecycle methods
     override fun onResume() {

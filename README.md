@@ -19,6 +19,13 @@ The app allows a user to set a target location on a map, either by typing an add
 - **Runtime Permissions:** Handles all necessary location permissions (foreground and background).
 - **Material Design:** Uses Material Design components for the UI.
 
+## Settings
+
+You can access the settings page by tapping the settings icon in the toolbar on the main screen. The settings page allows you to customize the following:
+
+-   **Geofence Radius:** Adjust the slider to set the distance for the geofence trigger (from 50 to 1000 meters).
+-   **Dark Mode:** Use the switch to toggle between light and dark themes for the application.
+
 ## Setup Instructions
 
 To build and run this app, you will need to provide your own Google Maps API key.
